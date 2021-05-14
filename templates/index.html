@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Vis Network | Basic usage</title>
+    <style>
+      #container {
+        width: 100%;
+        height: 600px;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.css" integrity="sha512-NJXM8vzWgDcBy9SCUTJXYnNO43sZV3pfLWWZMFTuCtEUIOcznk+AMpH6N3XruxavYfMeMmjrzDMEQ6psRh/6Hw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.js" integrity="sha512-GE9mKnPrTn2DY5AZuIC9yE6K4FF8T+9lsO7jwHn+RW9rEjnHzF/in0oGwlPzRwjhQ+oJiawmtfvleX+l6h5/cA==" crossorigin="anonymous"></script>
+  </head>
+  <body>
+
+    <div id="container"></div>
+
+    <script type="text/javascript">
+      let container = document.getElementById("container");
+      fetch('data').then((result) => {
+        result.json().then((data) => {
+          data.nodes.forEach((node) => {
+            node.title = Object.keys(node.properties).map((prop) => {
+              return `<li>${prop}: ${node.properties[prop]}</li>`;
+            }).join('\n');
+          });
+          let options = {
+            interaction: {
+              dragNodes: true,
+              dragView: true,
+              hover: true,
+              navigationButtons: true,
+            },
+            layout: {
+              hierarchical: {
+                direction: 'DU',
+                sortMethod: 'directed',
+              },
+            },
+          };
+          let network = new vis.Network(container, data, options);
+          s.on('afterDrawing').then(() => {
+            console.log('hi');
+          })
+        });
+      });
+    </script>
+  </body>
+</html>
